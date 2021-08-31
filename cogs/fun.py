@@ -33,10 +33,10 @@ class Fun(commands.Cog):
 
     @commands.command(help = "Gradual color fill.")
     async def fill(self, ctx, r, g, b):
-        if(r > 255 or g > 255 or b > 255):
+        if(int(r) > 255 or int(g) > 255 or int(b) > 255):
             await ctx.send(f"At least one color is higher than 255. Please fix.")
             return
-        if(r < 0 or g < 0 or b < 0):
+        if(int(r) < 0 or int(g) < 0 or int(b) < 0):
             await ctx.send(f"At least one color is lower than 0. Please fix.")
             return
         await gradualColorFill(self.strip, Color(r, g, b), 50)
