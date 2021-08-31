@@ -3,6 +3,7 @@ from discord.ext import commands
 import asyncio
 import time
 from rpi_ws281x import *
+import webcolors
 
 
 # Configuration taken from the strandtest example in rpi_ws281x
@@ -32,7 +33,7 @@ class Fun(commands.Cog):
         strip.show()
 
     @commands.command(help = "Gradual color fill.")
-    async def fill(self, ctx, r, g, b):
+    async def fillrgb(self, ctx, r, g, b):
         if(int(r) > 255 or int(g) > 255 or int(b) > 255):
             await ctx.send(f"At least one color is higher than 255. Please fix.")
             return
@@ -40,6 +41,12 @@ class Fun(commands.Cog):
             await ctx.send(f"At least one color is lower than 0. Please fix.")
             return
         await gradualColorFill(self.strip, Color(int(r), int(g), int(b)), 5)
+        await ctx.send(f"COLOR!")
+
+    @commands.command(help = "Gradual color fill with words.")
+    async def fill(self, ctx, color):
+        rgb_tuple = webcolors.name_to_rgb(color)
+        await gradualColorFill(self.strip, Color(rgb_tuple.red, rgb_tuple.green, rgb_tuple.blue), 5)
         await ctx.send(f"COLOR!")
 
     @commands.command(help = "Clears the colors.")
