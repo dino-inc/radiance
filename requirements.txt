@@ -1,0 +1,3 @@
+discord.py
+webcolors
+rpi_ws281x
