@@ -39,7 +39,7 @@ class Fun(commands.Cog):
         if(int(r) < 0 or int(g) < 0 or int(b) < 0):
             await ctx.send(f"At least one color is lower than 0. Please fix.")
             return
-        await gradualColorFill(self.strip, Color(r, g, b), 50)
+        await gradualColorFill(self.strip, Color(255, 0, 0), 50)
         await ctx.send(f"COLOR!")
 
     @commands.command(help = "Clears the colors.")
