@@ -45,7 +45,11 @@ class Fun(commands.Cog):
 
     @commands.command(help = "Gradual color fill with words.")
     async def fill(self, ctx, color):
-        rgb_tuple = webcolors.name_to_rgb(color)
+        try:
+            rgb_tuple = webcolors.name_to_rgb(color)
+        except ValueError:
+            await ctx.send("Invalid color.")
+            return
         await gradualColorFill(self.strip, Color(rgb_tuple.red, rgb_tuple.green, rgb_tuple.blue), 5)
         await ctx.send(f"COLOR!")
 
