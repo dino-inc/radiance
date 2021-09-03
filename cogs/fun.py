@@ -63,7 +63,7 @@ class Fun(commands.Cog):
                 random.randrange(1, 255),
                 random.randrange(1, 255),
                 random.randrange(1, 255)))
-            time.sleep(float(interval))
+            await asyncio.sleep(float(interval))
 
         # Set stop back to false and clear strip
         await clearStrip(self.strip)
@@ -83,7 +83,7 @@ async def gradualColorFill(strip, color, pause):
     for i in range(strip.numPixels()):
         strip.setPixelColor(i, color)
         strip.show()
-        time.sleep(pause/1000.0)
+        await asyncio.sleep(pause/1000.0)
 
 async def instantColorFill(self, color):
     if(self.stop == True):
