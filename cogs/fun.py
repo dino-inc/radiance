@@ -4,6 +4,7 @@ import asyncio
 import time
 from rpi_ws281x import *
 import webcolors
+import random
 
 
 # Configuration taken from the strandtest example in rpi_ws281x
@@ -23,6 +24,7 @@ class Fun(commands.Cog):
         self.bot = bot
         self.strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
         self.strip.begin()
+        self.stop = False
 
 
     @commands.command(help = "test light command.")
@@ -53,9 +55,26 @@ class Fun(commands.Cog):
         await gradualColorFill(self.strip, Color(rgb_tuple.red, rgb_tuple.green, rgb_tuple.blue), 5)
         await ctx.send(f"COLOR!")
 
+    @commands.command(help = "Random colors on an interval")
+    async def randcycle(self, ctx, interval):
+        while(self.stop == False):
+            await gradualColorFill(self.strip, Color(
+                random.randrange(1, 255),
+                random.randrange(1, 255),
+                random.randrange(1, 255)), 1)
+            time.sleep(10)
+        # Set stop back to false and clear strip
+        self.stop = False
+        await clearStrip(self.strip)
+
+
+    @commands.command(help = "Stops the cycle")
+    async def stop(self, ctx):
+        self.stop = True
+
     @commands.command(help = "Clears the colors.")
     async def clear(self, ctx):
-        await gradualColorFill(self.strip, Color(0, 0, 0), 1)
+        await clearStrip(self.strip)
 
 # Also mostly taken from strandtest
 async def gradualColorFill(strip, color, pause):
@@ -63,6 +82,9 @@ async def gradualColorFill(strip, color, pause):
         strip.setPixelColor(i, color)
         strip.show()
         time.sleep(pause/1000.0)
+
+async def clearStrip(strip):
+    await gradualColorFill(strip, Color(0, 0, 0), 1)
 
 
 def setup(bot):
