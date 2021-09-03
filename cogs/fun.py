@@ -62,7 +62,7 @@ class Fun(commands.Cog):
                 random.randrange(1, 255),
                 random.randrange(1, 255),
                 random.randrange(1, 255)), 1)
-            time.sleep(10)
+            time.sleep(interval)
         # Set stop back to false and clear strip
         self.stop = False
         await clearStrip(self.strip)
