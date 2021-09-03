@@ -58,11 +58,16 @@ class Fun(commands.Cog):
     @commands.command(help = "Random colors on an interval")
     async def randcycle(self, ctx, interval):
         while(self.stop == False):
-            await gradualColorFill(self.strip, Color(
+            # await gradualColorFill(self.strip, Color(
+            #    random.randrange(1, 255),
+            #    random.randrange(1, 255),
+            #    random.randrange(1, 255)), 1)
+            self.strip.fill(Color(
                 random.randrange(1, 255),
                 random.randrange(1, 255),
-                random.randrange(1, 255)), 1)
-            time.sleep(int(interval))
+                random.randrange(1, 255)))
+            time.sleep(float(interval))
+
         # Set stop back to false and clear strip
         self.stop = False
         await clearStrip(self.strip)
@@ -71,6 +76,7 @@ class Fun(commands.Cog):
     @commands.command(help = "Stops the cycle")
     async def stop(self, ctx):
         self.stop = True
+        await ctx.send("Stopping.")
 
     @commands.command(help = "Clears the colors.")
     async def clear(self, ctx):
