@@ -24,7 +24,7 @@ class Fun(commands.Cog):
         self.bot = bot
         self.strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
         self.strip.begin()
-        self.stop = False
+        self.stop = True
 
 
     @commands.command(help = "test light command.")
@@ -57,19 +57,15 @@ class Fun(commands.Cog):
 
     @commands.command(help = "Random colors on an interval")
     async def randcycle(self, ctx, interval):
+        self.stop = False
         while(self.stop == False):
-            # await gradualColorFill(self.strip, Color(
-            #    random.randrange(1, 255),
-            #    random.randrange(1, 255),
-            #    random.randrange(1, 255)), 1)
-            await instantColorFill(self.strip, Color(
+            await instantColorFill(self, Color(
                 random.randrange(1, 255),
                 random.randrange(1, 255),
                 random.randrange(1, 255)))
             time.sleep(float(interval))
 
         # Set stop back to false and clear strip
-        self.stop = False
         await clearStrip(self.strip)
 
 
@@ -89,10 +85,12 @@ async def gradualColorFill(strip, color, pause):
         strip.show()
         time.sleep(pause/1000.0)
 
-async def instantColorFill(strip, color):
-    for i in range(strip.numPixels()):
-        strip.setPixelColor(i, color)
-    strip.show()
+async def instantColorFill(self, color):
+    if(self.stop == True):
+        return
+    for i in range(self.strip.numPixels()):
+        self.strip.setPixelColor(i, color)
+    self.strip.show()
 
 async def clearStrip(strip):
     await gradualColorFill(strip, Color(0, 0, 0), 1)
