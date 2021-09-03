@@ -62,7 +62,7 @@ class Fun(commands.Cog):
             #    random.randrange(1, 255),
             #    random.randrange(1, 255),
             #    random.randrange(1, 255)), 1)
-            self.strip.fill(Color(
+            await instantColorFill(self.strip, Color(
                 random.randrange(1, 255),
                 random.randrange(1, 255),
                 random.randrange(1, 255)))
@@ -88,6 +88,11 @@ async def gradualColorFill(strip, color, pause):
         strip.setPixelColor(i, color)
         strip.show()
         time.sleep(pause/1000.0)
+
+async def instantColorFill(strip, color):
+    for i in range(strip.numPixels()):
+        strip.setPixelColor(i, color)
+    strip.show()
 
 async def clearStrip(strip):
     await gradualColorFill(strip, Color(0, 0, 0), 1)
