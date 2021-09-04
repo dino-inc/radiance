@@ -1,4 +1,4 @@
-iimport discord
+import discord
 import sys
 import traceback
 from discord.ext import commands
