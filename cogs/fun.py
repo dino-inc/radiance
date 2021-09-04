@@ -64,7 +64,6 @@ class Fun(commands.Cog):
                 random.randrange(1, 255),
                 random.randrange(1, 255)), 1)
             await asyncio.sleep(float(interval))
-
         # Set stop back to false and clear strip
         await clearStrip(self.strip)
 
@@ -76,7 +75,7 @@ class Fun(commands.Cog):
 
     @commands.command(help = "Clears the colors.")
     async def clear(self, ctx):
-        await clearStrip(self.strip)
+        await clearStrip(self)
 
 # Also mostly taken from strandtest
 async def gradualColorFill(self, color, pause):
@@ -91,8 +90,8 @@ async def instantColorFill(self, color):
         self.strip.setPixelColor(i, color)
     self.strip.show()
 
-async def clearStrip(strip):
-    await gradualColorFill(strip, Color(0, 0, 0), 1)
+async def clearStrip(self):
+    await gradualColorFill(self, Color(0, 0, 0), 1)
 
 
 def setup(bot):
