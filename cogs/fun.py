@@ -88,6 +88,7 @@ class Fun(commands.Cog):
             for i in range(strip.numPixels()):
                 if(i%int(interval) == 0):
                     await setSegment(self, i+(self.counter%300), i+int(length)+(self.counter%300), Color(0, 0, 0))
+            strip.show()
             self.counter += 1
 
         await clearStrip(self)
