@@ -59,10 +59,10 @@ class Fun(commands.Cog):
     async def randcycle(self, ctx, interval):
         self.stop = False
         while(self.stop == False):
-            await instantColorFill(self, Color(
+            await gradualColorFill(self, Color(
                 random.randrange(1, 255),
                 random.randrange(1, 255),
-                random.randrange(1, 255)))
+                random.randrange(1, 255)), 1)
             await asyncio.sleep(float(interval))
 
         # Set stop back to false and clear strip
