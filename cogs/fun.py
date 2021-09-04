@@ -24,6 +24,7 @@ class Fun(commands.Cog):
         self.bot = bot
         self.strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
         self.strip.begin()
+        self.strip.counter = 0
         self.stop = True
 
 
@@ -42,7 +43,7 @@ class Fun(commands.Cog):
         if(int(r) < 0 or int(g) < 0 or int(b) < 0):
             await ctx.send(f"At least one color is lower than 0. Please fix.")
             return
-        await gradualColorFill(self.strip, Color(int(r), int(g), int(b)), 5)
+        await gradualColorFill(self, Color(int(r), int(g), int(b)), 5)
         await ctx.send(f"COLOR!")
 
     @commands.command(help = "Gradual color fill with words.")
@@ -52,7 +53,7 @@ class Fun(commands.Cog):
         except ValueError:
             await ctx.send("Invalid color.")
             return
-        await gradualColorFill(self.strip, Color(rgb_tuple.red, rgb_tuple.green, rgb_tuple.blue), 5)
+        await gradualColorFill(self, Color(rgb_tuple.red, rgb_tuple.green, rgb_tuple.blue), 5)
         await ctx.send(f"COLOR!")
 
     @commands.command(help = "Random colors on an interval")
@@ -65,6 +66,30 @@ class Fun(commands.Cog):
                 random.randrange(1, 255)), 1)
             await asyncio.sleep(float(interval))
         # Set stop back to false and clear strip
+        await clearStrip(self)
+
+    @commands.command(help = "Pulsing lights on an interval")
+    async def lightcrawl(self, ctx, color, length, interval):
+        strip = self.strip
+        try:
+            rgb_tuple = webcolors.name_to_rgb(color)
+        except ValueError:
+            await ctx.send("Invalid color.")
+            return
+        rgb_color = Color(rgb_tuple.red, rgb_tuple.green, rgb_tuple.blue)
+        self.stop = False
+        self.counter = 0
+
+        while(self.stop == False):
+            # Set the entire strip to a color that will be divided up
+            for i in range(strip.numPixels()):
+                strip.setPixelColor(i, rgb_color)
+            # Turn off portions of the strip
+            for i in range(strip.numPixel()):
+                if(i%interval == 0):
+                    await setSegment(self, i+(self.counter%300), i+length+(self.counter%300), Color(0, 0, 0))
+            self.counter += 1
+
         await clearStrip(self)
 
 
@@ -91,7 +116,12 @@ async def instantColorFill(self, color):
     self.strip.show()
 
 async def clearStrip(self):
+    self.counter = 0
     await gradualColorFill(self, Color(0, 0, 0), 1)
+
+async def setSegment(self, start, stop, color):
+    for i in range(start, stop):
+        self.strip.setPixelColor(i, color)
 
 
 def setup(bot):
