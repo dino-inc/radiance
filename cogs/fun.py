@@ -87,8 +87,6 @@ async def gradualColorFill(self, color, pause):
         await asyncio.sleep(pause/1000.0)
 
 async def instantColorFill(self, color):
-    if(self.stop == True):
-        return
     for i in range(self.strip.numPixels()):
         self.strip.setPixelColor(i, color)
     self.strip.show()
