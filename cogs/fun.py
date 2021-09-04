@@ -79,7 +79,8 @@ class Fun(commands.Cog):
         await clearStrip(self.strip)
 
 # Also mostly taken from strandtest
-async def gradualColorFill(strip, color, pause):
+async def gradualColorFill(self, color, pause):
+    strip = self.strip
     for i in range(strip.numPixels()):
         strip.setPixelColor(i, color)
         strip.show()
