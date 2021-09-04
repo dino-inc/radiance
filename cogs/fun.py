@@ -86,8 +86,8 @@ class Fun(commands.Cog):
                 strip.setPixelColor(i, rgb_color)
             # Turn off portions of the strip
             for i in range(strip.numPixels()):
-                if(i%interval == 0):
-                    await setSegment(self, i+(self.counter%300), i+length+(self.counter%300), Color(0, 0, 0))
+                if(i%int(interval) == 0):
+                    await setSegment(self, i+(self.counter%300), i+int(length)+(self.counter%300), Color(0, 0, 0))
             self.counter += 1
 
         await clearStrip(self)
