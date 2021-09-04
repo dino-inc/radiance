@@ -65,7 +65,7 @@ class Fun(commands.Cog):
                 random.randrange(1, 255)), 1)
             await asyncio.sleep(float(interval))
         # Set stop back to false and clear strip
-        await clearStrip(self.strip)
+        await clearStrip(self)
 
 
     @commands.command(help = "Stops the cycle")
